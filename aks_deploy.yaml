@@ -1,0 +1,26 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: ocr-runner
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ocr-runner
+    spec:
+      containers:
+      - name: ocr-runner
+        image: ${ACR_LOGINSERVER}/ocrfunctions:kube${BUILD_NUMBER}
+      imagePullSecrets:
+      - name: $KUBERNETES_SECRET_NAME
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ocr-runner
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: ocr-runner
