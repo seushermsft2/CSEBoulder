@@ -36,9 +36,6 @@ class TestCredScannerChecker(pylint.testutils.CheckerTestCase):
 
         tokens = [
             tokenize.TokenInfo(
-                tokenize.STRING, "This is my string!", (0, 0), (0, 0), ""
-            ),
-            tokenize.TokenInfo(
                 tokenize.STRING, "p@ssw0rd!", (0, 0), (0, 0), ""
             )]
 
@@ -51,4 +48,23 @@ class TestCredScannerChecker(pylint.testutils.CheckerTestCase):
                     confidence=HIGH
                 ),
         ):
+            self.checker.process_tokens(tokens)
+
+    def test_simple_strings_are_not_passwords(self):
+        """
+        Tests whether simple strings with 2 character classes are passwords
+        """
+
+        tokens = [
+            tokenize.TokenInfo(
+                tokenize.STRING, "this-is-not-my-password", (0, 0), (0, 0), ""
+            ),
+            tokenize.TokenInfo(
+                tokenize.STRING, "123456789", (0, 0), (0, 0), ""
+            ),
+            tokenize.TokenInfo(
+                tokenize.STRING, "!@#$%^&**", (0, 0), (0, 0), ""
+            )]
+
+        with self.assertNoMessages():
             self.checker.process_tokens(tokens)

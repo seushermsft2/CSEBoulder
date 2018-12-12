@@ -48,6 +48,18 @@ class CredentialChecker(BaseTokenChecker):
         if ' ' in token:
             return False
 
+        if ((token.startswith('"') and token.endswith('"')) or
+                (token.startswith("'") and token.endswith("'"))):
+            token = token[1:-1]
+
+        # If the string is a website, don't treat it as a password
+        if re.search(r"^^http[s]*[:][/]{2}.*", token) is not None:
+            return False
+
+        # If the string is an email address, don't treat it as a password
+        if re.search(r"^.*[@].*[.](com|net|org)", token) is not None:
+            return False
+
         character_classes = 0
 
         # Check for uppercase
@@ -58,11 +70,15 @@ class CredentialChecker(BaseTokenChecker):
         if re.search(r"[a-z]", token) is not None:
             character_classes += 1
 
+        # searching for numbers
+        if re.search(r"[0-9]", token) is not None:
+            character_classes += 1
+
         # searching for symbols
         if re.search(r"[ !#$%&'()*+,-./[\\\]^_`{|}~"+r'"]', token) is not None:
             character_classes += 1
 
-        if character_classes > 1:
+        if character_classes > 2:
             return True
 
         return False
