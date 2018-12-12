@@ -1,4 +1,6 @@
-parentDir=$(dirname $(dirname $(readlink -f "$0")))
+current_file_path=$(readlink -f '$0')
+this_file_directory=$(dirname "$current_file_path")
+parentDir=$(dirname "$this_file_directory")
 
 # Install the dependency required to build the project
 pip3 install pylint
