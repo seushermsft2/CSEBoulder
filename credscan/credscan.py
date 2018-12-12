@@ -42,7 +42,8 @@ class CredentialChecker(BaseTokenChecker):
     def _is_password(token):
         """
         Determines whether or not a string is a password.
-        Any string without a space and with more than a single character class
+        Any string without a space, that isn't an email, or
+        website, and with more than two character classes
         is considered a password.
         """
         if ' ' in token:
@@ -57,7 +58,7 @@ class CredentialChecker(BaseTokenChecker):
             return False
 
         # If the string is an email address, don't treat it as a password
-        if re.search(r"^.*[@].*[.](com|net|org)", token) is not None:
+        if re.search(r"^.*[@].*[.](com|net|org|edu)", token) is not None:
             return False
 
         character_classes = 0
