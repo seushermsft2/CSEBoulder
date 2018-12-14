@@ -1,3 +1,5 @@
+set -e
+
 buildDockerImage() {
    DIRECTORY=$1
    LOWER_DIRECTORY=$(echo $DIRECTORY | tr '[:upper:]' '[:lower:]')
